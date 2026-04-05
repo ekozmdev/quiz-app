@@ -40,7 +40,7 @@ npm run dev
 2. GitHub で対象リポジトリを開く
 3. `Settings` -> `Pages` を開く
 4. `Build and deployment` の `Source` を `GitHub Actions` にする
-5. デフォルトブランチが `master` であることを確認する
+5. デフォルトブランチが `main` であることを確認する
 6. そのブランチへ push する
 7. `Actions` タブで `Deploy to GitHub Pages` ワークフローが成功するのを待つ
 8. `Settings` -> `Pages` に表示される公開 URL を開く
@@ -67,7 +67,7 @@ BASE_PATH=/ npm run build
 4. `vite.config.ts` で GitHub Pages 用の `base` を設定する
 5. `.github/workflows/deploy.yml` を追加する
 6. GitHub の `Settings` -> `Pages` で `Source: GitHub Actions` を選ぶ
-7. `master` ブランチへ push する
+7. `main` ブランチへ push する
 8. Actions 成功後に Pages の URL を確認する
 
 ## 公式ドキュメント
