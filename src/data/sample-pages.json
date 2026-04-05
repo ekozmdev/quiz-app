@@ -1,0 +1,73 @@
+{
+  "title": "Sample Quiz Set",
+  "description": "GitHub Pages とこのクイズアプリの基本確認",
+  "questions": [
+    {
+      "questionNumber": 1,
+      "type": "single",
+      "prompt": "Vite で作った React アプリを GitHub Pages に公開するとき、このリポジトリで採用している方法はどれですか。",
+      "options": [
+        { "id": "A", "text": "GitHub Actions でビルドして Pages へデプロイする" },
+        { "id": "B", "text": "ブラウザで開いた内容をそのまま保存する" },
+        { "id": "C", "text": "Issue に `dist` を貼り付ける" },
+        { "id": "D", "text": "GitHub Desktop だけで自動公開される" }
+      ],
+      "correctAnswers": ["A"],
+      "explanation": "正解は **A** です。\n\nこのリポジトリでは GitHub Actions で `npm run build` を実行し、生成された `dist` を GitHub Pages にデプロイします。"
+    },
+    {
+      "questionNumber": 2,
+      "type": "multiple",
+      "selectionCount": 3,
+      "prompt": "このアプリが対応している問題形式を 3 つ選んでください。",
+      "options": [
+        { "id": "A", "text": "単一選択" },
+        { "id": "B", "text": "複数選択" },
+        { "id": "C", "text": "並べ替え" },
+        { "id": "D", "text": "自由記述" }
+      ],
+      "correctAnswers": ["A", "B", "C"],
+      "explanation": "対応形式は次の 3 つです。\n\n- `single`\n- `multiple`\n- `ordering`\n\n自由記述は今の実装には入っていません。"
+    },
+    {
+      "questionNumber": 3,
+      "type": "ordering",
+      "selectionCount": 4,
+      "prompt": "このリポジトリで新しいクイズを追加して動作確認する流れを正しい順に並べてください。",
+      "options": [
+        { "id": "A", "text": "`src/data` に JSON を置く" },
+        { "id": "B", "text": "必要ならバリデータで JSON を確認する" },
+        { "id": "C", "text": "`npm run dev` でアプリを起動する" },
+        { "id": "D", "text": "ブラウザで問題セットを選ぶ" }
+      ],
+      "correctAnswers": ["A", "B", "C", "D"],
+      "explanation": "基本の流れは `JSON を置く -> 検証する -> 開発サーバーを起動する -> 画面で選ぶ` です。\n\n1. JSON を追加\n2. 必要なら検証\n3. 開発サーバー起動\n4. 画面確認"
+    },
+    {
+      "questionNumber": 4,
+      "type": "single",
+      "prompt": "このリポジトリでは `src/data` 配下の JSON をどう読み込んでいますか。",
+      "options": [
+        { "id": "A", "text": "ファイル名を `index.ts` に毎回手書きで追加している" },
+        { "id": "B", "text": "`import.meta.glob('./*.json')` で自動収集している" },
+        { "id": "C", "text": "実行時に GitHub API から一覧を取っている" },
+        { "id": "D", "text": "Webpack 専用の設定で固定読み込みしている" }
+      ],
+      "correctAnswers": ["B"],
+      "explanation": "正解は **B** です。\n\n`src/data/index.ts` では `import.meta.glob('./*.json', { eager: true })` を使って、直下の JSON をまとめて読み込んでいます。"
+    },
+    {
+      "questionNumber": 5,
+      "type": "single",
+      "prompt": "GitHub Pages に公開するとき、リポジトリ名に応じた `base` パスを主に解決しているファイルはどれですか。",
+      "options": [
+        { "id": "A", "text": "`tsconfig.json`" },
+        { "id": "B", "text": "`vite.config.ts`" },
+        { "id": "C", "text": "`src/main.tsx`" },
+        { "id": "D", "text": "`eslint.config.js`" }
+      ],
+      "correctAnswers": ["B"],
+      "explanation": "正解は **B** です。\n\n`vite.config.ts` で GitHub Actions 環境とリポジトリ名を見て `base` を決めています。必要なら `BASE_PATH` 環境変数で上書きできます。"
+    }
+  ]
+}
