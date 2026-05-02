@@ -37,9 +37,26 @@ async function main() {
 
 function validateQuizSet(value) {
   const errors = []
+  const allowedTopLevelKeys = new Set(['title', 'description', 'questions'])
+  const allowedQuestionKeys = new Set([
+    'questionNumber',
+    'type',
+    'selectionCount',
+    'prompt',
+    'options',
+    'correctAnswers',
+    'explanation',
+  ])
+  const allowedOptionKeys = new Set(['id', 'text'])
 
   if (!isRecord(value)) {
     return ['Root must be a JSON object.']
+  }
+
+  for (const key of Object.keys(value)) {
+    if (!allowedTopLevelKeys.has(key)) {
+      errors.push(`Unexpected top-level key: ${key}.`)
+    }
   }
 
   assertNonEmptyString(errors, value.title, 'title')
@@ -58,6 +75,12 @@ function validateQuizSet(value) {
     if (!isRecord(question)) {
       errors.push(`${path} must be an object.`)
       return
+    }
+
+    for (const key of Object.keys(question)) {
+      if (!allowedQuestionKeys.has(key)) {
+        errors.push(`${path} contains an unexpected key: ${key}.`)
+      }
     }
 
     if (!Number.isInteger(question.questionNumber) || question.questionNumber < 1) {
@@ -87,6 +110,12 @@ function validateQuizSet(value) {
         if (!isRecord(option)) {
           errors.push(`${optionPath} must be an object.`)
           return
+        }
+
+        for (const key of Object.keys(option)) {
+          if (!allowedOptionKeys.has(key)) {
+            errors.push(`${optionPath} contains an unexpected key: ${key}.`)
+          }
         }
 
         assertNonEmptyString(errors, option.id, `${optionPath}.id`)
@@ -126,11 +155,6 @@ function validateQuizSet(value) {
         }
       })
     }
-
-    if (question.references !== undefined && !Array.isArray(question.references)) {
-      errors.push(`${path}.references must be an array when present.`)
-    }
-
     validateTypeSpecificRules(errors, question, path)
   })
 

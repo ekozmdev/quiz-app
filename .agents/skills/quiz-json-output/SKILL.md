@@ -25,6 +25,17 @@ description: Generate quiz-set JSON for this repository's browser quiz app from 
 }
 ```
 
+この形以外は不正です。特に、一般的な試験問題 JSON にある次のキーは使いません。
+
+- `source_file`
+- `total_questions`
+- `id`
+- `question`
+- `correct`
+- 連想オブジェクト形式の `options`
+
+余計なキーを混ぜてはいけません。`title` / `description` / `questions` 以外のトップレベルキーは出力しません。
+
 各問題は次のキーを持ちます。
 
 - `questionNumber`: 1 以上の整数。セット内で一意
@@ -35,7 +46,42 @@ description: Generate quiz-set JSON for this repository's browser quiz app from 
 - `correctAnswers`: 正答 option id の配列
 - `explanation`: 採点後に見せる Markdown 文字列
 
+問題オブジェクトでも余計なキーは出力しません。使うキーは上記だけです。
+
 詳細ルールは `references/quiz-json-format.md` を参照してください。
+
+## Common Wrong Format
+
+次のような形式は、このアプリでは読めません。
+
+```json
+{
+  "title": "Quiz",
+  "source_file": "notes.md",
+  "total_questions": 50,
+  "questions": [
+    {
+      "id": 1,
+      "question": "問題文",
+      "options": {
+        "A": "選択肢A",
+        "B": "選択肢B"
+      },
+      "correct": "A"
+    }
+  ]
+}
+```
+
+上の形式を作ってはいけません。必ずこのアプリ専用のキーへ変換して出力してください。
+
+変換対応:
+
+- `id` -> `questionNumber`
+- `question` -> `prompt`
+- `correct` -> `correctAnswers: ["A"]`
+- `options: { "A": "..." }` -> `options: [{ "id": "A", "text": "..." }]`
+- `source_file` と `total_questions` は削除
 
 ## Workflow
 
@@ -69,12 +115,14 @@ pbpaste | node .agents/skills/quiz-json-output/scripts/validate-quiz-json.mjs --
 - `ordering` は全選択肢を並べ替える問題として作る
 - `explanation` は Markdown を使ってよい。箇条書き、強調、コード、リンクは許容する
 - 問題文と解説は日本語で簡潔に書く
+- 迷ったら `references/quiz-json-format.md` のテンプレートをそのまま複製して中身だけ差し替える
 
 ## Validation
 
 バリデータは次を確認します。
 
 - トップレベル構造
+- 許可されていないキーの混入
 - 各フィールドの型と必須性
 - `questionNumber` と `options[].id` の一意性
 - `correctAnswers` と `options` の整合性
