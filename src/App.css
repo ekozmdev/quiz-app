@@ -1,5 +1,6 @@
 .app-shell {
   min-height: 100svh;
+  min-width: 0;
   padding: 24px 16px 40px;
   display: flex;
   flex-direction: column;
@@ -9,6 +10,7 @@
 .toolbar,
 .question-card,
 .empty-card {
+  min-width: 0;
   border: 1px solid var(--outline);
   border-radius: 16px;
   background: var(--surface);
@@ -28,8 +30,15 @@
 }
 
 .heading-block {
+  min-width: 0;
   display: grid;
   gap: 8px;
+}
+
+.heading-block h1,
+.heading-block p,
+h2 {
+  overflow-wrap: anywhere;
 }
 
 .eyebrow {
@@ -40,17 +49,23 @@
 }
 
 .select-wrap {
+  min-width: 0;
   display: grid;
   gap: 6px;
 }
 
 .select-wrap select {
   appearance: none;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   border: 1px solid var(--outline);
   border-radius: 10px;
   padding: 12px 14px;
   background: #fff;
   color: var(--on-surface);
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .select-wrap select:focus {
@@ -82,10 +97,15 @@
 }
 
 .status-item {
+  min-width: 0;
   padding: 12px 14px;
   border: 1px solid var(--outline);
   border-radius: 10px;
   background: var(--surface);
+}
+
+.status-item strong {
+  overflow-wrap: anywhere;
 }
 
 .stat-label,
@@ -140,6 +160,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 14px;
+  min-width: 0;
   width: 100%;
   border: 1px solid var(--outline);
   border-radius: 12px;
@@ -182,6 +203,8 @@
 
 .option-main {
   display: flex;
+  flex: 1;
+  min-width: 0;
   gap: 14px;
   align-items: flex-start;
 }
@@ -203,7 +226,9 @@
 }
 
 .option-text {
+  min-width: 0;
   line-height: 1.6;
+  overflow-wrap: anywhere;
 }
 
 .ordering-panel {
@@ -216,6 +241,10 @@
   border: 1px solid var(--outline);
   border-radius: 12px;
   background: var(--surface-container);
+}
+
+.ordering-panel > div {
+  min-width: 0;
 }
 
 .sequence-list {
@@ -248,10 +277,12 @@
 .ghost-button,
 .nav-button,
 .subtle-button {
+  max-width: 100%;
   border: 1px solid transparent;
   border-radius: 10px;
   padding: 10px 16px;
   font: inherit;
+  overflow-wrap: anywhere;
   cursor: pointer;
   transition:
     background 160ms ease,
@@ -318,8 +349,10 @@
 }
 
 .markdown-content {
+  min-width: 0;
   line-height: 1.7;
   color: var(--on-surface);
+  overflow-wrap: anywhere;
 }
 
 .markdown-content > :first-child {
@@ -383,6 +416,7 @@
 }
 
 .summary-item {
+  min-width: 0;
   padding: 16px;
   border: 1px solid var(--outline);
   border-radius: 12px;
@@ -413,5 +447,35 @@
   .ordering-panel {
     flex-direction: column;
     align-items: stretch;
+  }
+}
+
+@media (max-width: 420px) {
+  .app-shell {
+    padding: 12px 8px 28px;
+  }
+
+  .question-card,
+  .empty-card,
+  .toolbar,
+  .result-card,
+  .summary-item {
+    padding: 12px;
+  }
+
+  .option-card,
+  .option-main {
+    gap: 10px;
+  }
+
+  .option-card {
+    padding: 12px;
+  }
+
+  .option-id,
+  .order-badge,
+  .control-badge {
+    min-width: 32px;
+    min-height: 32px;
   }
 }
