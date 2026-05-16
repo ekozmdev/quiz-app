@@ -41,11 +41,9 @@ h2 {
   overflow-wrap: anywhere;
 }
 
-.eyebrow {
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--primary);
+.setup-toolbar h1 {
+  font-size: 1.55rem;
+  line-height: 1.25;
 }
 
 .select-wrap {
@@ -84,16 +82,17 @@ h2 {
 }
 
 .status-panel {
-  padding: 16px;
+  padding: 12px 14px;
   border: 1px solid var(--outline);
   border-radius: 12px;
   background: var(--surface-container);
 }
 
 .status-row {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
 }
 
 .status-item {
@@ -108,17 +107,39 @@ h2 {
   overflow-wrap: anywhere;
 }
 
+.status-set {
+  min-width: 0;
+}
+
+.status-set strong {
+  display: block;
+  overflow: hidden;
+  color: var(--on-surface);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status-progress {
+  flex: 0 0 auto;
+  text-align: right;
+}
+
+.status-progress strong {
+  display: block;
+  color: var(--on-surface);
+}
+
 .stat-label,
 .panel-label {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 2px;
   font-size: 12px;
   color: var(--on-surface-variant);
 }
 
 .progress-track {
-  height: 8px;
-  margin-top: 16px;
+  height: 6px;
+  margin-top: 10px;
   border-radius: 999px;
   background: #d8e6ee;
   overflow: hidden;
@@ -273,6 +294,10 @@ h2 {
   margin-top: 24px;
 }
 
+.question-actions .primary-button {
+  margin-left: auto;
+}
+
 .primary-button,
 .ghost-button,
 .nav-button,
@@ -395,18 +420,21 @@ h2 {
 
 .summary-header {
   display: grid;
-  gap: 16px;
+  gap: 10px;
 }
 
 .summary-score strong {
+  display: block;
   font-size: clamp(2rem, 5vw, 3.25rem);
   color: var(--on-surface);
+  line-height: 1.1;
 }
 
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
+  border-top: 0;
 }
 
 .summary-list {
@@ -423,6 +451,11 @@ h2 {
   background: var(--surface-container);
 }
 
+.summary-item.incorrect {
+  border-color: rgba(190, 24, 93, 0.24);
+  background: rgba(190, 24, 93, 0.07);
+}
+
 .summary-question,
 .summary-answer {
   margin-bottom: 8px;
@@ -437,11 +470,6 @@ h2 {
   .empty-card,
   .toolbar {
     padding: 16px;
-  }
-
-  .status-row,
-  .summary-grid {
-    grid-template-columns: 1fr;
   }
 
   .ordering-panel {
