@@ -266,6 +266,19 @@ function SummaryScreen({
   })
   const percentage =
     sessionQuestions.length === 0 ? 0 : Math.round((correctCount / sessionQuestions.length) * 100)
+  const [copyStatus, setCopyStatus] = useState<'idle' | 'copied' | 'failed'>('idle')
+
+  async function handleCopyIncorrectQuestions() {
+    const text = formatIncorrectQuestionsForClipboard(incorrectQuestions, answersByQuestion)
+    try {
+      await navigator.clipboard.writeText(text)
+      setCopyStatus('copied')
+      window.setTimeout(() => setCopyStatus('idle'), 1800)
+    } catch {
+      setCopyStatus('failed')
+      window.setTimeout(() => setCopyStatus('idle'), 2400)
+    }
+  }
 
   return (
     <main className="app-shell">
@@ -298,24 +311,85 @@ function SummaryScreen({
             </div>
           ) : (
             <>
-              <p className="summary-note">不正解だった問題</p>
-              {incorrectQuestions.map((question) => (
-                <div key={question.questionNumber} className="summary-item incorrect">
-                  <p className="summary-question">
-                    問{question.questionNumber}: {question.prompt}
-                  </p>
-                  <p className="summary-answer">
-                    正解: <code>{question.correctAnswers.join(' -> ')}</code>
-                  </p>
-                  <MarkdownContent markdown={question.explanation} />
-                </div>
-              ))}
+              <div className="summary-list-header">
+                <p className="summary-note">不正解だった問題</p>
+                <button
+                  type="button"
+                  className="ghost-button copy-incorrect-button"
+                  onClick={handleCopyIncorrectQuestions}
+                >
+                  {copyStatus === 'copied'
+                    ? 'コピーしました'
+                    : copyStatus === 'failed'
+                      ? 'コピー失敗'
+                      : 'まとめてコピー'}
+                </button>
+              </div>
+              {incorrectQuestions.map((question) => {
+                const selectedAnswers =
+                  answersByQuestion[question.questionNumber]?.selectedAnswers ?? []
+                return (
+                  <div key={question.questionNumber} className="summary-item incorrect">
+                    <p className="summary-question">
+                      問{question.questionNumber}: {question.prompt}
+                    </p>
+                    <p className="summary-answer">
+                      自分の回答:{' '}
+                      <code>
+                        {selectedAnswers.length === 0
+                          ? '未回答'
+                          : selectedAnswers
+                              .map((id) => formatAnswerOption(question, id))
+                              .join(' -> ')}
+                      </code>
+                    </p>
+                    <p className="summary-answer">
+                      正解:{' '}
+                      <code>
+                        {question.correctAnswers
+                          .map((id) => formatAnswerOption(question, id))
+                          .join(' -> ')}
+                      </code>
+                    </p>
+                    <MarkdownContent markdown={question.explanation} />
+                  </div>
+                )
+              })}
             </>
           )}
         </div>
       </section>
     </main>
   )
+}
+
+function formatIncorrectQuestionsForClipboard(
+  incorrectQuestions: QuizQuestion[],
+  answersByQuestion: Record<number, AnswerRecord>,
+) {
+  return incorrectQuestions
+    .map((question) => {
+      const selectedAnswers = answersByQuestion[question.questionNumber]?.selectedAnswers ?? []
+      const selectedText =
+        selectedAnswers.length === 0
+          ? '未回答'
+          : selectedAnswers.map((id) => formatAnswerOption(question, id)).join(' -> ')
+      const correctText = question.correctAnswers
+        .map((id) => formatAnswerOption(question, id))
+        .join(' -> ')
+      return [
+        `問${question.questionNumber}: ${question.prompt}`,
+        `自分の回答: ${selectedText}`,
+        `正解: ${correctText}`,
+        `解説: ${question.explanation.trim()}`,
+      ].join('\n')
+    })
+    .join('\n\n')
+}
+
+function formatAnswerOption(question: QuizQuestion, answerId: string) {
+  const option = question.options.find((candidate) => candidate.id === answerId)
+  return option ? `${answerId}. ${option.text}` : answerId
 }
 
 function SummaryStat({ label, value }: { label: string; value: number }) {
@@ -611,7 +685,7 @@ function QuestionActions({
         前の問題
       </button>
       <button type="button" className="ghost-button" onClick={onResetAnswer}>
-        回答をやり直す
+        クリア
       </button>
       {!submitted ? (
         <button type="button" className="primary-button" onClick={onSubmit} disabled={!canSubmit}>

@@ -443,6 +443,21 @@ h2 {
   margin-top: 20px;
 }
 
+.summary-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.summary-note {
+  margin: 0;
+}
+
+.copy-incorrect-button {
+  flex: 0 0 auto;
+}
+
 .summary-item {
   min-width: 0;
   padding: 16px;
@@ -475,6 +490,15 @@ h2 {
   .ordering-panel {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .summary-list-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .copy-incorrect-button {
+    width: 100%;
   }
 }
 
