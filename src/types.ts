@@ -21,3 +21,5 @@ export type QuizSet = {
   description: string
   questions: QuizQuestion[]
 }
+
+export type QuizSetWithId = QuizSet & { id: string }

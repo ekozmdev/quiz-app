@@ -1,11 +1,11 @@
-import type { QuizSet } from '../types'
+import type { QuizSet, QuizSetWithId } from '../types'
 
 const quizModules = import.meta.glob('./*.json', {
   eager: true,
   import: 'default',
 }) as Record<string, unknown>
 
-export const quizSets: Array<QuizSet & { id: string }> = Object.entries(quizModules)
+export const quizSets: QuizSetWithId[] = Object.entries(quizModules)
   .flatMap(([path, quizSet]) => {
     const fileName = path.split('/').pop()?.replace('.json', '') ?? path
     if (!isQuizSet(quizSet)) {
